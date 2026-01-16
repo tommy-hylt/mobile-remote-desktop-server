@@ -25,6 +25,7 @@ A lightweight RDP-like server for mobile web clients. Built with TypeScript/Node
   mouseButton.ts     # POST /mouse/left/down
   mouseScroll.ts     # POST /mouse/scroll/up
   keyPress.ts        # POST /key/a
+  clipboard.ts       # GET/POST /clipboard
   shutdown.ts        # POST /shutdown
   state.ts           # Shared state (capture area, last capture hash, mouse down timer)
 ```
@@ -65,6 +66,10 @@ A lightweight RDP-like server for mobile web clients. Built with TypeScript/Node
 
 ### Keyboard
 - `POST /key/<key>` - Presses single key (e.g., `a`, `enter`, `escape`)
+
+### Clipboard
+- `GET /clipboard` - Returns `{ text: string }` with current clipboard content
+- `POST /clipboard` - Body: `{ text: string }` - Sets clipboard content
 
 ### Shutdown
 - `POST /shutdown` - Gracefully shutdown server
