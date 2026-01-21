@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 import pyautogui
+import os
 
 from routes import (
     screen_size,
@@ -27,13 +30,10 @@ app.add_middleware(
 # Disable pyautogui failsafe
 pyautogui.FAILSAFE = False
 
+# Static files directory
+STATIC_DIR = os.path.join(os.path.dirname(__file__), "..", "mobile-remote-desktop-web2", "dist")
 
-@app.get("/")
-def root():
-    return {"message": "Mobile Remote Desktop Server", "status": "running"}
-
-
-# Register routers
+# Register API routers
 app.include_router(screen_size.router)
 app.include_router(capture.router)
 app.include_router(mouse_position.router)
@@ -43,6 +43,23 @@ app.include_router(mouse_scroll.router)
 app.include_router(key_press.router)
 app.include_router(clipboard.router)
 app.include_router(shutdown.router)
+
+# Mount static files (after API routes so API takes precedence)
+if os.path.exists(STATIC_DIR):
+    app.mount("/assets", StaticFiles(directory=os.path.join(STATIC_DIR, "assets")), name="assets")
+
+    @app.get("/")
+    def serve_root():
+        return FileResponse(os.path.join(STATIC_DIR, "index.html"))
+
+    @app.get("/{path:path}")
+    def serve_spa(path: str):
+        # Try to serve the file directly
+        file_path = os.path.join(STATIC_DIR, path)
+        if os.path.isfile(file_path):
+            return FileResponse(file_path)
+        # Otherwise serve index.html for SPA routing
+        return FileResponse(os.path.join(STATIC_DIR, "index.html"))
 
 if __name__ == "__main__":
     import uvicorn

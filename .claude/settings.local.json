@@ -21,7 +21,8 @@
       "Bash(ls:*)",
       "Bash(pip install:*)",
       "Bash(python -m pip install:*)",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "Bash(dir \"C:\\\\Users\\\\User\\\\Desktop\\\\260116 NordRemote\")"
     ]
   }
 }
