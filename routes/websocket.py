@@ -86,10 +86,11 @@ async def handle_capture(websocket: WebSocket, msg_id: str, params: dict, method
 
     area = params.get("area")
     quality = params.get("quality", 50)
+    resize = params.get("resize")
     last_hash = params.get("last_hash")
 
     # Call existing capture function
-    result = capture.capture(area=area, quality=quality, last_hash=last_hash)
+    result = capture.capture(area=area, quality=quality, resize=resize, last_hash=last_hash)
 
     if isinstance(result, Response):
         next_hash = result.headers.get("Next-Hash", "")

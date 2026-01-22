@@ -29,10 +29,20 @@ def parse_area(area: Optional[str]) -> dict:
     return {"left": 0, "top": 0, "width": size.width, "height": size.height}
 
 
+def parse_resize(resize: Optional[str]) -> Optional[tuple]:
+    """Parse resize string 'w,h' into tuple. Returns None if not provided."""
+    if resize:
+        parts = resize.split(",")
+        if len(parts) == 2:
+            return (int(parts[0]), int(parts[1]))
+    return None
+
+
 @router.get("/capture")
 def capture(
     area: Optional[str] = None,
     quality: int = 50,
+    resize: Optional[str] = None,
     last_hash: Optional[str] = Header(None, alias="Last-Hash")
 ):
     monitor = parse_area(area)
@@ -41,6 +51,11 @@ def capture(
         img = sct.grab(monitor)
         # Convert to PIL Image
         pil_img = Image.frombytes("RGB", img.size, img.bgra, "raw", "BGRX")
+
+    # Resize if requested
+    resize_dims = parse_resize(resize)
+    if resize_dims:
+        pil_img = pil_img.resize(resize_dims, Image.Resampling.LANCZOS)
 
     # Compress to JPEG
     buffer = BytesIO()

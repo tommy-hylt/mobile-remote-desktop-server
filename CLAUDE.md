@@ -46,6 +46,7 @@ A lightweight RDP-like server for mobile web clients. Built with Python/FastAPI.
 - `GET /capture` - Returns JPEG image of capture area
   - Query param `area` (optional): `x,y,w,h` format (e.g., `?area=0,0,800,600`)
   - Query param `quality` (optional): JPEG quality 1-100 (default: 50)
+  - Query param `resize` (optional): `w,h` format (e.g., `?resize=800,600`)
   - If no area specified, captures full screen
   - Header `Last-Hash` (optional): MD5 hash of previous capture
   - If `Last-Hash` matches current capture hash, returns 204 No Content
@@ -103,7 +104,7 @@ WebSocket wraps HTTP endpoints. Client sends JSON requests, server responds with
 | Method | Params | Response |
 |--------|--------|----------|
 | `GET /screen-size` | none | `{ width, height }` |
-| `GET /capture` | `{ area?, quality?, last_hash? }` | Special (see below) |
+| `GET /capture` | `{ area?, quality?, resize?, last_hash? }` | Special (see below) |
 | `GET /mouse/position` | none | `{ x, y }` |
 | `POST /mouse/move` | `{ x, y }` | `{ success, x, y }` |
 | `POST /mouse/{button}/{action}` | none | `{ success, button, action }` |
