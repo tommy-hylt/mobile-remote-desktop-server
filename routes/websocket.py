@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 import json
 import logging
 
-from routes import screen_size, capture, mouse_position, mouse_move, mouse_button, mouse_scroll, key_press, clipboard, shutdown
+from routes import screen_size, capture, mouse_position, mouse_move, mouse_button, mouse_scroll, key_press, text, clipboard, shutdown
 
 router = APIRouter()
 logger = logging.getLogger("uvicorn")
@@ -54,9 +54,21 @@ async def handle_request(websocket: WebSocket, msg: dict) -> None:
             await send_response(websocket, msg_id, 200, result, method, client)
 
         elif method.startswith("POST /key/"):
-            # POST /key/{key}
-            key = method[10:]  # Remove "POST /key/"
-            result = key_press.key_press(key)
+            # POST /key/{key} or POST /key/{key}/{action}
+            path = method[10:]  # Remove "POST /key/"
+            if "/" in path:
+                # POST /key/{key}/{action}
+                key, action = path.rsplit("/", 1)
+                result = key_press.key_action(key, action)
+            else:
+                # POST /key/{key}
+                result = key_press.key_press(path)
+            await send_response(websocket, msg_id, 200, result, method, client)
+
+        elif method.startswith("POST /text/"):
+            # POST /text/{text}
+            txt = method[11:]  # Remove "POST /text/"
+            result = text.type_text(txt)
             await send_response(websocket, msg_id, 200, result, method, client)
 
         elif method == "GET /clipboard":

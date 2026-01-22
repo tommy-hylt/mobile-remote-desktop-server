@@ -23,7 +23,8 @@
       "Bash(python -m pip install:*)",
       "Bash(python:*)",
       "Bash(dir \"C:\\\\Users\\\\User\\\\Desktop\\\\260116 NordRemote\")",
-      "Bash(git config:*)"
+      "Bash(git config:*)",
+      "Bash(cmd /c \"for /f \"\"tokens=5\"\" %a in \\(''netstat -ano ^| findstr :6485''\\) do taskkill /F /PID %a\")"
     ]
   }
 }

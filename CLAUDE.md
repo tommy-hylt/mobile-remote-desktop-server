@@ -67,6 +67,12 @@ A lightweight RDP-like server for mobile web clients. Built with Python/FastAPI.
 
 ### Keyboard
 - `POST /key/{key}` - Presses single key (e.g., `a`, `enter`, `escape`)
+- `POST /key/{key}/down` - Holds key down
+- `POST /key/{key}/up` - Releases key
+- For down, auto-releases after 30s safety timeout if relative up is not called
+
+### Text
+- `POST /text/{text}` - Types text string (ASCII only)
 
 ### Clipboard
 - `GET /clipboard` - Returns `{ text: str }` with current clipboard content
@@ -110,6 +116,8 @@ WebSocket wraps HTTP endpoints. Client sends JSON requests, server responds with
 | `POST /mouse/{button}/{action}` | none | `{ success, button, action }` |
 | `POST /mouse/scroll` | `{ x, y }` | `{ success, x, y }` |
 | `POST /key/{key}` | none | `{ success, key }` |
+| `POST /key/{key}/{action}` | none | `{ success, key, action }` |
+| `POST /text/{text}` | none | `{ success, text }` |
 | `GET /clipboard` | none | `{ text }` |
 | `POST /clipboard` | `{ text }` | `{ success }` |
 | `POST /shutdown` | none | `{ success, message }` |

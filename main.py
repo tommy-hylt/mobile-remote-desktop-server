@@ -13,6 +13,7 @@ from routes import (
     mouse_button,
     mouse_scroll,
     key_press,
+    text,
     clipboard,
     shutdown,
     websocket,
@@ -42,6 +43,7 @@ app.include_router(mouse_move.router)
 app.include_router(mouse_button.router)
 app.include_router(mouse_scroll.router)
 app.include_router(key_press.router)
+app.include_router(text.router)
 app.include_router(clipboard.router)
 app.include_router(shutdown.router)
 app.include_router(websocket.router)
